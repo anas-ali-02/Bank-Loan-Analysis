@@ -7,13 +7,11 @@ This repository contains the code and documentation for the Customized Bank Loan
 Read the detailed domain knowledge here:  
 [![Read Domain Knowledge](https://img.shields.io/badge/Read%20Domain%20Knowledge-0A66C2?style=for-the-badge&logo=readme&logoColor=white)](domain_knowledge.md)  
 
----
 
 ## Problem Statement
 Read the problem statement here:  
 [![Read Problem Statement](https://img.shields.io/badge/Read%20Problem%20Statement-0A66C2?style=for-the-badge&logo=readme&logoColor=white)](problem_statement.md)  
 
----
 
 ## Power BI Dashboard
 Explore the interactive dashboard here:  

@@ -1,64 +1,42 @@
-# Bank_Loan_Project
-Finance Domain | Bank Loan Analysis
+use Bank_Loan_DB;
+SELECT top 5 * FROM bank_loan_data;
 
-This repository contains the code and documentation for the Customized Bank Loan Report project. Below you'll find the domain knowledge in `domain_knowledge.md`, problem statement in `problem_statement.md` and an overview of the solution implemented using SQL and Power BI.
+SELECT count(id) as total_loan_applications from bank_loan_data;
 
-## Domain Knowledge
-
-To read the domain knowledge, please refer to  [![Domain Knowledge](https://img.shields.io/badge/Domain%20Knowledge-blue)](domain_knowledge.md)
-
-## Problem Statement
-
-To read the problem statement, please refer to [![Problem Statement](https://img.shields.io/badge/Problem%20Statement-blue)](problem_statement.md)
-
-### Power BI Implementation
-
-Click the button below to view the Power BI dashboard:
-
-[![View Dashboard](https://img.shields.io/badge/View%20Dashboard-Click%20Here-blue)](https://app.powerbi.com/view?r=eyJrIjoiNzAxODcyODctMjM4Ni00ODc3LWExNjgtM2UxZWEwMmNjNGM1IiwidCI6ImI2NDE3Y2QwLTFmNzMtNDQ3MS05YTM5LTIwOTUzODIyYTM0YSIsImMiOjN9)
-
-### SQL Implementation
-
-# KPI'S
-### 1. Total Loan Applications
-
-```sql 
-select count(id) as total_loan_applications from bank_loan_data;
-```
-<strong>Output:</strong><br>
-![Total loan applications](images/image1.png)
-
-
-
-### 2. Month to Date Loan Applications
-
-```sql
 SELECT count(id) as MTD_loan_applications from bank_loan_data
 WHERE MONTH(issue_date) = 12 AND YEAR(issue_date) = 2021;
-```
-or
-```sql
-# to make it dynamic rather than getting static month and date
+
+/* or dynamic*/
 SELECT COUNT(id) AS MTD_loan_applications 
 FROM bank_loan_data 
 WHERE YEAR(issue_date) = YEAR(GETDATE()) 
 AND MONTH(issue_date) = MONTH(GETDATE());
-```
-<strong>Output:</strong><br>
-![Total loan applications](images/image2.png)
 
-### 3. Month to Date Total Funded Amount
-
-```sql
 SELECT SUM(loan_amount) as MTD_Total_Funded_Amount from bank_loan_data
 WHERE MONTH(issue_date) = 12 AND YEAR(issue_date) = 2021;
-```
 
-<strong>Output:</strong><br>
-![Total funded amount](images/image3.png)
+select SUM(total_payment) as MTD_Total_Amount_Received from bank_loan_data
+WHERE MONTH(issue_date) = 12 AND YEAR(issue_date) = 2021;
 
-### 4. Month over Month Total Funded Amount
-```sql
+
+-- Month to date total amount
+
+SELECT 
+	YEAR(issue_date) as Year,
+	MONTH(issue_date) as Month,
+	SUM(total_payment) as Monthly_Total_Amount_Received
+FROM 
+	bank_loan_data
+WHERE
+	YEAR(issue_date) = 2021
+GROUP BY
+	YEAR(issue_date),
+	MONTH(issue_date)
+ORDER BY
+	Month;
+
+
+-- Month over month total amount
 
 WITH MonthlyTotals AS (
     SELECT 
@@ -97,26 +75,15 @@ ORDER BY
     Year,
     Month;
 
-```
-<strong>Output:</strong><br>
-![Total funded amount](images/image4.png)
-
-### 5. Average Interest Rate for year 2021
-```sql
+-- Average Interest Rate
 SELECT 
 	ROUND(AVG(int_rate)*100,2) as average_interest_rate
 FROM
 	bank_loan_data
 WHERE
 	YEAR(issue_date) = 2021;
-```
 
-<strong>Output:</strong><br>
-![Average Interest Rate](images/image5.png)
-
-### 5. Month over Month Average Interest Rate
-
-```sql
+-- Month to Month Average Interest Rate
 WITH MonthlyInterestRate AS(
 	SELECT
 		YEAR(issue_date) as Year,
@@ -157,63 +124,63 @@ ORDER BY
 	Year, 
 	Month;
 
-```
+-- Average Debt to Income Ratio
 
-<strong>Output:</strong><br>
-![Average Interest Rate Month over Month](images/image6.png)
-
-### 6. Average Debt to Income Ratio
-
-```sql
 SELECT
 	ROUND(AVG(dti)*100,4) as average_debt_to_income_ratio
 FROM
 	bank_loan_data
-```
 
-<strong>Output:</strong><br>
-![Average Debt to Income Ratio](images/image7.png)
+-- Average DTI group by month
+SELECT 
+	YEAR(issue_date) as Year,
+	MONTH(issue_date) as Month,
+	ROUND(AVG(dti)*100,4) as Monthly_average_dti
+FROM 
+	bank_loan_data
+WHERE
+	YEAR(issue_date) = 2021
+GROUP BY
+	YEAR(issue_date),
+	MONTH(issue_date)
+ORDER BY
+	Month;
 
-## Good Loan Vs Bad Loan KPI's
-
-### 7.1 Good Loan Percentage
-
-```sql
+---------------------------- Good Loan vs Bad Loan KPI's --------------------------------
+--- Good Loan Percentage
 SELECT
-	COUNT(CASE WHEN loan_status = 'Fully Paid' OR loan_status = 'Current' THEN id END)*100.0
+	COUNT(CASE WHEN loan_status = 'Fully Paid' OR loan_status = 'Current' THEN id END)*100
 	/
 	COUNT(id) as Good_Loan_Percentage
 FROM
 	bank_loan_data
-```
-or
-```sql
+
+	-- or --
 SELECT
 	COUNT(CASE WHEN loan_status IN ('Fully Paid', 'Current') THEN id END)*100.0
 	/
 	COUNT(id) as Good_Loan_Percentage
 FROM
 	bank_loan_data
-```
-<strong>Output:</strong><br>
-![Good Loan Percentage](images/image7.1.png)
 
-### 7.2 Good Loan Applications
 
-```sql
+--- Bad Loan Percentage
+
+SELECT
+	COUNT(CASE WHEN loan_status IN ('Charged Off') THEN id END)*100.0
+	/
+	COUNT(id) as Bad_Loan_Percentage
+FROM
+	bank_loan_data
+
+
 SELECT
 	count(id) as Good_Loan_Applications
 FROM
 	bank_loan_data
 WHERE
 	loan_status IN ('Fully Paid', 'Current');
-```
-<strong>Output:</strong><br>
-![Good Loan Applications](images/image7.2.png)
 
-### 7.3 Good Loan Total Funded Amount
-
-```sql
 SELECT
 	SUM(loan_amount) as Good_Loan_Funded_Amount
 FROM
@@ -221,53 +188,31 @@ FROM
 WHERE
 	loan_status IN ('Fully Paid', 'Current');
 
-```
-<strong>Output:</strong><br>
-![Good Loan Funded Amount](images/image7.3.1.png)
+-- Total Good Loan Funded Amount
 
-or (cast result to decimal type and using concat method to add millions in the suffix)
-
-```sql
 SELECT
 	CONCAT(CAST(SUM(loan_amount)/1000000 AS DECIMAL(18,2)), ' millions') as "Good_Loan_Funded_Amount (in millions)"
 FROM
 	bank_loan_data
 WHERE
 	loan_status IN ('Fully Paid', 'Current');
-```
-<strong>Output:</strong><br>
-![Good Loan Funded Amount](images/image7.3.2.png)
 
-### 7.4 Good Loan Total Amount Received
-
-```sql
 SELECT
 	CONCAT(CAST(SUM(total_payment)/1000000 AS DECIMAL(18,2)), ' millions') as Good_Loan_Amount_Received
 FROM
 	bank_loan_data
 WHERE
 	loan_status IN ('Fully Paid', 'Current');
-```
 
-<strong>Output:</strong><br>
-![Good Loan Total Amount Received](images/image7.4.png)
+-- Bad Loan
 
-### 8.1 Bad Loan Percentage
-
-```sql
 SELECT
 	COUNT(CASE WHEN loan_status = 'Charged Off' THEN id END)*100.0
 	/
 	COUNT(id) as Bad_Loan_Percentage
 FROM
 	bank_loan_data
-```
-<strong>Output:</strong><br>
-![Bad Loan Percentage](images/image8.1.png)
 
-### 8.2 Bad Loan Applications
-
-```sql
 
 SELECT
 	count(id) as Bad_Loan_Applications
@@ -276,13 +221,6 @@ FROM
 WHERE
 	loan_status IN ('Charged Off');
 
-```
-<strong>Output:</strong><br>
-![Bad Loan Applications](images/image8.2.png)
-
-### 8.3 Bad Loan Total Funded Amount
-
-```sql
 SELECT
 	CONCAT(CAST(SUM(loan_amount)/1000000 AS DECIMAL(18,2)), ' millions') as Bad_Loan_Total_Funded_Amount
 FROM
@@ -290,18 +228,9 @@ FROM
 WHERE
 	loan_status IN ('Charged Off');
 
-```
-<strong>Output:</strong><br>
-![Bad Loan Applications](images/image8.3.png)
-
-### 8.4 Bad Loan Total Amount Received
-```sql
 SELECT
 	CONCAT(CAST(SUM(total_payment)/1000000 AS DECIMAL(18,2)), ' millions') as Bad_Loan_Amount_Received
 FROM
 	bank_loan_data
 WHERE
 	loan_status IN ('Charged Off');
-```
-<strong>Output:</strong><br>
-![Bad Loan Total Amount Received](images/image8.4.png)

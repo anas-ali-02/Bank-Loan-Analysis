@@ -3,19 +3,22 @@ Finance Domain | Bank Loan Analysis
 
 This repository contains the code and documentation for the Customized Bank Loan Report project. Below you'll find the domain knowledge in `domain_knowledge.md`, problem statement in `problem_statement.md` and an overview of the solution implemented using SQL and Power BI.
 
-## Domain Knowledge
+## 📚 Domain Knowledge  
+Read the detailed domain knowledge here:  
+➡️ **[Domain Knowledge](domain_knowledge.md)**  
 
-To read the domain knowledge, please refer to  [![Domain Knowledge](https://img.shields.io/badge/Domain%20Knowledge-blue)](domain_knowledge.md)
+---
 
-## Problem Statement
+## 📝 Problem Statement  
+Read the problem statement here:  
+➡️ **[Problem Statement](problem_statement.md)**  
 
-To read the problem statement, please refer to [![Problem Statement](https://img.shields.io/badge/Problem%20Statement-blue)](problem_statement.md)
+---
 
-### Power BI Implementation
+## 📊 Power BI Dashboard  
+Explore the interactive dashboard here:  
+🔗 **[View Dashboard](https://app.powerbi.com/view?r=eyJrIjoiNzAxODcyODctMjM4Ni00ODc3LWExNjgtM2UxZWEwMmNjNGM1IiwidCI6ImI2NDE3Y2QwLTFmNzMtNDQ3MS05YTM5LTIwOTUzODIyYTM0YSIsImMiOjN9)**  
 
-Click the button below to view the Power BI dashboard:
-
-[![View Dashboard](https://img.shields.io/badge/View%20Dashboard-Click%20Here-blue)](https://app.powerbi.com/view?r=eyJrIjoiNzAxODcyODctMjM4Ni00ODc3LWExNjgtM2UxZWEwMmNjNGM1IiwidCI6ImI2NDE3Y2QwLTFmNzMtNDQ3MS05YTM5LTIwOTUzODIyYTM0YSIsImMiOjN9)
 
 ### SQL Implementation
 
